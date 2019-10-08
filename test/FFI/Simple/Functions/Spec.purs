@@ -59,6 +59,7 @@ functionsSpec = describe "Functions" $ do
   it "args7" $ length (args7 "" 1 "" 2 "" 3 "") `shouldEqual` 7
   it "args8" $ length (args8 "" 1 "" 2 "" 3 "" 4) `shouldEqual` 8
   it "args9" $ length (args9 "" 1 "" 2 "" 3 "" 5 "") `shouldEqual` 9
+  it "args10" $ length (args10 0 "" 1 "" 2 "" 3 "" 5 "") `shouldEqual` 10
 
 foreign import val :: Unit -> Int
 foreign import sum :: forall a. a -> Int

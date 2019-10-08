@@ -1,14 +1,14 @@
 -- | Utilities for dealing with (uncurried) functions
 module FFI.Simple.Functions
-  ( new, bindTo, applyTo, delay
+  ( new, bindTo, applyTo, delay, impure
   , (...), applyMethod, applyMethod'
   , args1, args2, args3, args4, args5
   , args6, args7, args8, args9, args10
   ) where
 
-import Prelude ( class Monad, bind, flip, pure, (<<<) )
+import Prelude ( class Monad, bind, flip, pure, (<<<), Unit, unit )
 import FFI.Simple.Objects ( getProperty )
-import FFI.Simple.PseudoArray ( PseudoArray )
+import FFI.Simple.PseudoArray ( Arguments )
 import Data.Function.Uncurried
   ( Fn2, runFn2, Fn3, runFn3, Fn4,  runFn4
   , Fn5, runFn5, Fn6, runFn6, Fn7,  runFn7
@@ -79,62 +79,68 @@ applyMethod' = flip applyMethod
 delay :: forall a b m. Monad m => a -> (a -> m b) -> m b
 delay = bind <<< pure
 
--- | returns an argument as a PseudoArray
-args1 :: forall a. a -> PseudoArray
+-- TODO: meant to be used on an Effect-like monad.
+impure :: forall a m. Monad m => (Unit -> a) -> m a
+impure f = do
+  u <- pure unit
+  pure (f u)
+
+-- | returns an argument as an Arguments value
+args1 :: forall a. a -> Arguments
 args1 = _args1
 
-foreign import _args1 :: forall a. a -> PseudoArray
+foreign import _args1 :: forall a. a -> Arguments
 
--- | returns 2 arguments as a PseudoArray
-args2 :: forall a b. a -> b -> PseudoArray
+-- | returns 2 arguments as an Arguments value
+args2 :: forall a b. a -> b -> Arguments
 args2 = runFn2 _args2
 
-foreign import _args2 :: forall a b. Fn2 a b PseudoArray
+foreign import _args2 :: forall a b. Fn2 a b Arguments
 
--- | returns 3 arguments as a PseudoArray
-args3 :: forall a b c. a -> b -> c -> PseudoArray
+-- | returns 3 arguments as an Arguments value
+args3 :: forall a b c. a -> b -> c -> Arguments
 args3 = runFn3 _args3
 
-foreign import _args3 :: forall a b c. Fn3 a b c PseudoArray
+foreign import _args3 :: forall a b c. Fn3 a b c Arguments
 
--- | returns 4 arguments as a PseudoArray
-args4 :: forall a b c d. a -> b -> c -> d -> PseudoArray
+-- | returns 4 arguments as an Arguments value
+args4 :: forall a b c d. a -> b -> c -> d -> Arguments
 args4 = runFn4 _args4
 
-foreign import _args4 :: forall a b c d. Fn4 a b c d PseudoArray
+foreign import _args4 :: forall a b c d. Fn4 a b c d Arguments
 
--- | returns 5 arguments as a PseudoArray
-args5 :: forall a b c d e. a -> b -> c -> d -> e -> PseudoArray
+-- | returns 5 arguments as an Arguments value
+args5 :: forall a b c d e. a -> b -> c -> d -> e -> Arguments
 args5 = runFn5 _args5
 
-foreign import _args5 :: forall a b c d e. Fn5 a b c d e PseudoArray
+foreign import _args5 :: forall a b c d e. Fn5 a b c d e Arguments
 
--- | returns 6 arguments as a PseudoArray
-args6 :: forall a b c d e f. a -> b -> c -> d -> e -> f -> PseudoArray
+-- | returns 6 arguments as an Arguments value
+args6 :: forall a b c d e f. a -> b -> c -> d -> e -> f -> Arguments
 args6 = runFn6 _args6
 
-foreign import _args6 :: forall a b c d e f. Fn6 a b c d e f PseudoArray
+foreign import _args6 :: forall a b c d e f. Fn6 a b c d e f Arguments
 
--- | returns 7 arguments as a PseudoArray
-args7 :: forall a b c d e f g. a -> b -> c -> d -> e -> f -> g -> PseudoArray
+-- | returns 7 arguments as an Arguments value
+args7 :: forall a b c d e f g. a -> b -> c -> d -> e -> f -> g -> Arguments
 args7 = runFn7 _args7
 
-foreign import _args7 :: forall a b c d e f g. Fn7 a b c d e f g PseudoArray
+foreign import _args7 :: forall a b c d e f g. Fn7 a b c d e f g Arguments
 
--- | returns 8 arguments as a PseudoArray
-args8 :: forall a b c d e f g h. a -> b -> c -> d -> e -> f -> g -> h -> PseudoArray
+-- | returns 8 arguments as an Arguments value
+args8 :: forall a b c d e f g h. a -> b -> c -> d -> e -> f -> g -> h -> Arguments
 args8 = runFn8 _args8
 
-foreign import _args8 :: forall a b c d e f g h. Fn8 a b c d e f g h PseudoArray
+foreign import _args8 :: forall a b c d e f g h. Fn8 a b c d e f g h Arguments
 
--- | returns 9 arguments as a PseudoArray
-args9 :: forall a b c d e f g h i. a -> b -> c -> d -> e -> f -> g -> h -> i -> PseudoArray
+-- | returns 9 arguments as an Arguments value
+args9 :: forall a b c d e f g h i. a -> b -> c -> d -> e -> f -> g -> h -> i -> Arguments
 args9 = runFn9 _args9
 
-foreign import _args9 :: forall a b c d e f g h i. Fn9 a b c d e f g h i PseudoArray
+foreign import _args9 :: forall a b c d e f g h i. Fn9 a b c d e f g h i Arguments
 
--- | returns 9 arguments as a PseudoArray
-args10 :: forall a b c d e f g h i j. a -> b -> c -> d -> e -> f -> g -> h -> i -> j -> PseudoArray
+-- | returns 9 arguments as an Arguments value
+args10 :: forall a b c d e f g h i j. a -> b -> c -> d -> e -> f -> g -> h -> i -> j -> Arguments
 args10 = runFn10 _args10
 
-foreign import _args10 :: forall a b c d e f g h i j. Fn10 a b c d e f g h i j PseudoArray
+foreign import _args10 :: forall a b c d e f g h i j. Fn10 a b c d e f g h i j Arguments

@@ -6,7 +6,7 @@ module FFI.Simple
   ) where
 
 import FFI.Simple.Functions
-  ( bindTo, applyTo, delay
+  ( bindTo, applyTo, delay, impure
   , (...), applyMethod, applyMethod'
   , args1, args2, args3, args4, args5
   , args6, args7, args8, args9, args10
